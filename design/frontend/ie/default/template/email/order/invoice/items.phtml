@@ -1,0 +1,29 @@
+<?php
+
+$invoice = $this->getInvoice();
+$order   = $this->getOrder();
+?>
+<?php if ($invoice and $order): ?>
+<table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
+	<thead>
+		<tr>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px">&nbsp;</th>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Item')?></th>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Sku')?></th>
+			<th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Qty')?></th>
+			<th align="right" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Subtotal')?></th>
+		</tr>
+	</thead>
+
+	<?php $i=0; foreach ($invoice->getAllItems() as $item): ?>
+	<?php if($item->getOrderItem()->getParentItem()) continue; else $i++; ?>
+	<tbody<?=$i%2 ? ' bgcolor="#F6F6F6"' : ''?>>
+		<?=$this->getItemHtml($item)?>
+	</tbody>
+	<?php endforeach ?>
+
+	<tfoot>
+		<?php echo $this->getChildHtml('invoice_totals')?>
+	</tfoot>
+</table>
+<?php endif ?>

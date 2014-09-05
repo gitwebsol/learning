@@ -1,0 +1,20 @@
+<div class="dashboard">
+	<div class="page-title">
+		<h1><?=$this->__('My Dashboard')?></h1>
+	</div>
+	<?=$this->getMessagesBlock()->getGroupedHtml()?>
+	<?=$this->getChildHtml('hello')?>
+	<?=$this->getChildHtml('top')?>
+	<div class="box-account box-info">
+		<header>
+			<h2><?=$this->__('Account Information')?></h2>
+		</header>
+		<section>
+			<?=$this->getChildHtml('customer.account.dashboard.extra')?>
+			<?=$this->getChildHtml('info')?>
+			<?=$this->getChildHtml('address')?>
+		</section>
+	</div>
+	<?=$this->getChildHtml('info1')?>
+	<?=$this->getChildHtml('info2')?>
+</div>

@@ -1,0 +1,44 @@
+<div class="box-account box-recent">
+<?php $orders = $this->getOrders() ?>
+	<div class="box-head">
+		<h2><?=$this->__('Recent Orders')?></h2>
+		<?php if ( sizeof($orders->getItems()) > 0 ): ?><a href="<?=$this->getUrl('sales/order/history')?>"><?=$this->__('View All')?></a><?php endif ?>
+	</div>
+	<div class="box-content">
+		<?php if (sizeof($orders->getItems()) > 0): ?>
+			<table class="table no-margin" id="my-orders-table">
+				<thead>
+					<tr>
+						<th><?=$this->__('Order #')?></th>
+						<th><?=$this->__('Date')?></th>
+						<th><?=$this->__('Ship To')?></th>
+						<th><span class="nobr"><?=$this->__('Order Total')?></span></th>
+						<th><?=$this->__('Status')?></th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($orders as $order): ?>
+						<tr>
+							<td><?=$order->getRealOrderId()?></td>
+							<td><span class="nobr"><?=$this->formatDate($order->getCreatedAtStoreDate())?></span></td>
+							<td><?=$order->getShippingAddress() ? $this->htmlEscape($order->getShippingAddress()->getName()) : '&nbsp;'?></td>
+							<td><?=$order->formatPrice($order->getGrandTotal())?></td>
+							<td><em><?=$order->getStatusLabel()?></em></td>
+							<td class="a-center">
+								<span class="nobr">
+								<a href="<?=$this->getViewUrl($order)?>"><?=$this->__('View Order')?></a>
+								<?php if ($this->helper('sales/reorder')->canReorder($order)) : ?>
+									<span class="separator">|</span> <a href="<?=$this->getReorderUrl($order)?>" class="link-reorder"><?=$this->__('Reorder')?></a>
+								<?php endif?>
+								</span>
+							</td>
+						</tr>
+					<?php endforeach ?>
+				</tbody>
+			</table>
+		<?php else: ?>
+			<p><?=$this->__('You have placed no orders.') ?></p>
+		<?php endif ?>
+	</div>
+</div>

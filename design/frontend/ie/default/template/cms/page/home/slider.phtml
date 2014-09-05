@@ -1,0 +1,47 @@
+<?php
+/**
+ * @todo, add the `caption` field rather than just using
+ *        the `label` field.
+ */
+
+if ($slider = $this->getSlider() and $slides = $this->getSlidesCollection()): ?>
+
+	<?php
+
+	// Transition speed
+	$transitionSpeed = 600;
+	?>
+
+	<script>
+	jQuery(document).ready(function($) {
+
+		$("#home-page-slider").flexslider({
+			directionNav      : true,
+			controlNav        : false,
+			keyboardNav       : true,
+			slideshowSpeed    : 7000,
+			animationDuration : <?=$transitionSpeed?>,
+			animation         : 'slide'
+		});
+	});
+	</script>
+
+	<div class="flexslider" id="home-page-slider">
+		<ul class="slides">
+			<?php foreach ($slides as $slide): ?>
+
+				<li>
+					<?php if ($slide['title']): ?>
+						<a href="<?=((strpos($slide['title'], 'http://') === 0) or strpos($slide['title'], 'https://') === 0) ? $slide['title'] : Mage::getUrl($slide['title'])?>">
+					<?php endif ?>
+					<img src="<?=$this->helper('slider')->getBaseImagesUrl().$slide->getFileLocation()?>">
+					<?php if ($slide['title']): ?>
+						</a>
+					<?php endif ?>
+				</li>
+
+			<?php endforeach ?>
+		</ul>
+	</div>
+
+<?php endif ?>

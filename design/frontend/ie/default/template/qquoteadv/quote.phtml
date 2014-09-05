@@ -1,0 +1,243 @@
+<?php
+
+// Get quote
+$quote = $this->getQuote();
+$i     = 0;
+?>
+<div id="quote">
+	<div class="page-title">
+		<h1><?=$this->__('Request for Quote')?></h1>
+	</div>
+	<?php if ( ! $quote->getData()): ?>
+		<div class="cart-empty">
+			<p><?=$this->__('No Items to display.')?></p>
+			<p><?=$this->__('Click <a href="%s">here</a> to continue shopping.', $this->getUrl())?></p>
+		</div>
+	<?php else: ?>
+		<?php
+
+		// Get products that aren't saleable
+		$notSaleableProducts = $this->getNotSalableProductNames($this->getQuote());
+
+		echo $this->getMessagesBlock()->getGroupedHtml();
+		?>
+
+		<form method="post" id="quote-list" action="<?=$this->getUrl('qquoteadv/index/quoteRequest', array('_secure' => true))?>">
+
+			<div class="quote-table">
+				<table class="table table-bordered table-striped cart-table">
+					<thead>
+						<th class="a-center"></th>
+						<th><?=$this->__('Product Name')?></th>
+						<th class="no-border"></th>
+						<th class="a-center"><?=$this->__('Unit price')?></th>
+						<th class="a-center"><?=$this->__('Qty')?></th>
+						<th><?=$this->__('Request information')?></th>
+						<th class="a-center"></th>
+					</thead>
+
+					<tbody>
+						<?php foreach ($quote as $item): ?>
+							<?php $product = $this->getProduct($item->getProductId())?>
+							<tr>
+								<td class="a-center">
+									<a class="product-image" href="<?=$product->getProductUrl()?>">
+										<div class="box-inset box-inset-small is-inline-block">
+											<div class="box-inset-feature box-inset-small is-inline-block">
+												<img src="<?=$this->helper('catalog/image')->init($product, 'thumbnail', $item->getSmallImage())->resize(75)?>" alt="<?=$item->getName()?>">
+											</div>
+										</div>
+									</a>
+								</td>
+
+								<td>
+									<h2 class="product-name">
+										<a href="<?=$product->getProductUrl()?>"><?=$this->htmlEscape($product->getName())?></a>
+									</h2>
+
+									<?php if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE or $product->isConfigurable()): ?>
+
+										<?php
+
+										$quoteByProduct = Mage::helper('qquoteadv')->getQuoteItem($product, $item->getAttribute());
+										$qty            = $quoteByProduct->getItemsQty();	
+										$finalPrice     = $quoteByProduct->getSubtotal() / ($qty>0?$qty:1);
+
+										foreach ($quoteByProduct->getAllItems() as $item): ?>
+
+											<?php if ($item->getProductId() == $product->getId()): ?>
+
+												<?=$this->getItemHtml($item)?>
+
+											<?php endif ?>
+
+										<?php endforeach ?>
+									<?php else: ?>
+										<?php
+										$quoteByProduct = Mage::helper('qquoteadv')->getQuoteItem($product, $item->getAttribute());
+										$qty            = $quoteByProduct->getItemsQty();	
+										$finalPrice     = $quoteByProduct->getSubtotal() / ($qty>0?$qty:1);
+										
+										if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) : ?>
+											<?php
+
+											$options =  $this->getOptionList($product, $item->getAttribute());
+											?>
+
+											<dl class="item-options">
+												<?php if (is_array($options)): ?>
+													<?php foreach ($options as $label=>$option) : ?>
+													<?php if (empty($label)) continue ?>
+													<?php $formatedOptionValue = $this->getFormatedOptionValue($option)?>
+													<dt><?=$this->htmlEscape($label)?></dt>
+													<dd<?php if (isset($formatedOptionValue['full_view'])): ?> class="truncated"<?php endif ?>><?=$formatedOptionValue['value']?>
+														<?php if (isset($formatedOptionValue['full_view'])): ?>
+														<div class="truncated_full_value">
+															<dl class="item-options">
+																<dt><?=$this->htmlEscape($label)?></dt>
+																<dd><?=$formatedOptionValue['full_view']?></dd>
+															</dl>
+														</div>
+														<?php endif ?>
+													</dd>
+													<?php endforeach ?>
+												<?php endif ?>
+											</dl>
+										<?php endif ?>
+									<?php endif ?>
+								</td>
+
+								<td class="no-border">
+									<a href="<?=$this->getUrl('qquoteadv/index/configure' , array('id'=>$item->getId()))?>"><?=$this->__("Edit")?></a>
+								</td>
+
+								<td class="a-right">
+									<?php if (Mage::helper('qquoteadv/not2order')->getShowPrice($product)): ?>
+										<?=Mage::helper('checkout')->formatPrice($finalPrice)?>
+									<?php endif ?>
+								</td>
+
+								<td>
+									<div id="quote-item-<?=$item->getId()?>">
+										<div class="clearfix">
+											<input type="text" class="input-mini required-entry validate-zero-or-greater required-entry input-text loading" name="quote_request[<?=$item->getId()?>][qty][]" value="<?=$item->getQty()?>">
+										</div>
+									</div>
+									<div>
+										<a class="btn btn-small quote-add-qty" data-target="#quote-item-<?=$item->getId()?>" data-item="<?=$item->getId()?>" href="#" id="add-qty">
+											<em><em></em></em>
+											<?=$this->__('Add Qty')?>
+										</a>
+									</div>
+
+									<input type="hidden" name="quote[<?=$item->getId()?>][qty]" value="<?=$item->getQty()?>" size="3">&nbsp;
+									<input type="hidden" name="quote[<?=$item->getId()?>][attributeEncode]" value="<?=base64_encode($item->getAttribute())?>">
+									<input type="hidden" name="quote[<?=$item->getId()?>][product]" value="<?=$product->getId()?>">
+									<input type="hidden" name="quote[<?=$item->getId()?>][quoteid]" value="<?=$item->getId()?>">
+								</td>
+
+								<td>
+									<?php if ($i > 0): ?>
+										<textarea name="quote_request[<?=$item->getId()?>][client_request]" class="input-block-level" rows="4" style="width:98%;">&nbsp;</textarea>
+									<?php else: ?>
+										<div id="parent">
+											<textarea id="textArea" name="quote_request[<?=$item->getId()?>][client_request]" class="input-block-level" placeholder="<?=$this->__('Please provide any specific product request(s).')?>" rows="10"></textarea>
+										</div>
+									<?php endif ?>
+								</td>
+
+								<td class="a-center">
+									<input type="hidden" id="quote_id" name="quote_id" value="<?=$item->getQuoteId()?>">
+									<input type="hidden" class="input-text" name="quote[<?=$item->getId()?>][product]" value="<?=$item->getProductId()?>" size="3">
+									<input type="hidden" class="input-text" name="quote_request[<?=$item->getId()?>][product_id]" value="<?=$item->getProductId()?>" size="6">
+
+									<a class="btn-remove" href="<?=$this->getUrl('qquoteadv/index/delete', array('id' => $item->getId()))?>" title="<?=$this->__('Remove item')?>">&times;</a>
+								</td>
+							</tr>
+							<?php $i++?>
+						<?php endforeach ?>
+					</tbody>
+				</table>
+
+				<div class="feature-bar">
+
+					<?php if ($this->getContinueShoppingUrl()): ?>
+						<button type="button" title="<?=$this->__('Continue Shopping')?>" class="btn btn-dark cart-btn-continue btn-continue" onclick="setLocation('<?=$this->getContinueShoppingUrl()?>')">
+							<?=$this->__('Continue Shopping')?>
+						</button>
+					<?php endif ?>
+
+					<div class="pull-right">
+						<?php
+						$action = (count($notSaleableProducts) > 0) ? '' : 'setLocation(\''.$this->getUrl('qquoteadv/index/switch2Order').'\');';
+						?>
+						<button type="button" onclick="<?=$action?>" title="<?=$this->__('Move to Shopping cart')?>" class="btn btn-dark btn-update quote-btn-update">
+							<em><em></em></em>
+							<?=$this->__('Move to Shopping cart')?>
+						</button>
+					</div>
+
+				</div>
+			</div>
+
+			<?=$this->getChildHtml('qquote.address')?>
+
+			<div class="form-actions">
+				<input type="hidden" name="customer[is_quote]" value="1">
+
+				<button type="submit" class="btn btn-dark btn-checkout btn-proceed-checkout">
+					<em><em></em></em>
+					<?=$this->__('Request Quote')?>
+				</button>
+			</div>
+
+		</form>
+
+		<script>
+		//<![CDATA[
+			var quotelistForm = new VarienForm('quote-list');
+			new RegionUpdater('country', 'region', 'region_id', <?=$this->helper('directory')->getRegionJson()?>);
+			$('country').addClassName('w224');
+		//]]>
+		</script>
+
+		<script>
+		jQuery(document).ready(function($) {
+
+			// Add quantity to quote
+			$('.quote-add-qty').on('click', function(e) {
+				e.preventDefault();
+
+				// Get index for new IDs
+				var index = $(this).data('index');
+				if (typeof index === 'undefined') {
+					index = 2;
+				}
+
+				$($(this).attr('data-target')).append(
+					'<div class="clearfix quote-new-qty">' +
+						'<input type="text" class="pull-left input-mini required-entry validate-zero-or-greater required-entry input-text loading" name="quote_request[' + $(this).attr('data-item') + '][qty][]" placeholder="<?=$this->__('Qty')?>" value="">' +
+						'&nbsp;' +
+						'<a href="#" class="btn-remove quote-remove-qty">&times;</a>' +
+					'</div>'
+				);
+
+				// Set the new index
+				index++;
+				$(this).data('index', index);
+
+				return false;
+			});
+
+			// Remove quantity from quote
+			$('body').on('click', '.quote-remove-qty', function(e) {
+				e.preventDefault();
+
+				$(this).closest('.quote-new-qty').remove();
+
+				return false;
+			});
+		});
+		</script>
+	<?php endif ?>
+</div>

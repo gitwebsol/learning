@@ -1,0 +1,17 @@
+<?php
+
+// Get resources
+$isActiveQuote = $this->isActiveQuote();
+?>
+<ul class="nav nav-tabs">
+    <li class="<?=( ! $isActiveQuote) ? 'active' : null?>">
+        <a href="<?=Mage::getUrl('checkout/cart')?>">
+            <?=Mage::helper('customer')->__('Shopping Cart')?>
+        </a>
+    </li>
+    <li class="<?=($isActiveQuote) ? 'active' : null?>">
+        <a href="<?=Mage::getUrl('qquoteadv/index')?>">
+            <?=$this->helper('qquoteadv')->__('Request for Quote')?>
+        </a>
+    </li>
+</ul>

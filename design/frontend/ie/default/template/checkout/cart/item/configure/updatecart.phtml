@@ -1,0 +1,22 @@
+<?php
+$product     = $this->getProduct();
+$buttonTitle = $this->__('Update Cart');
+?>
+<?php if ($product->isSaleable()): ?>
+	<div class="add-to-cart">
+
+		<?php if ( ! $product->isGrouped()): ?>
+			<div class="qty-container">
+				<label for="qty"><?=$this->__('Qty:')?></label>
+				<input type="text" name="qty" id="qty" maxlength="12" value="<?=$this->getProductDefaultQty() * 1?>" title="<?=$this->__('Qty')?>" class="input-text qty">
+			</div>
+		<?php endif ?>
+
+		<button type="button" title="<?=$buttonTitle?>" class="btn btn-cart" onclick="productAddToCartForm.submit(this)">
+			<em><em></em></em>
+			<?=$buttonTitle?>
+		</button>
+
+		<?=$this->getChildHtml('', true, true)?>
+	</div>
+<?php endif ?>

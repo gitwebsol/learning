@@ -1,0 +1,27 @@
+<?php
+/**
+ * Category layered navigation state
+ *
+ * @see Mage_Catalog_Block_Layer_State
+ */
+?>
+<?php if ($filters = $this->getActiveFilters()): ?>
+	<div class="currently">
+		<p class="block-subtitle"><?=$this->__('Currently Shopping by:')?></p>
+		<ol class="no-margin">
+		<?php foreach ($filters as $filter): ?>
+			<li>
+				<span class="label"><?=$this->__($filter->getName())?>:</span> <span class="value"><?=$this->stripTags($filter->getLabel())?></span>
+				<?php if ($clearLinkUrl = $filter->getClearLinkUrl()): ?>
+					<a class="btn-previous" href="<?=$filter->getRemoveUrl()?>" title="<?=$this->__('Previous')?>"><?=$this->__('Previous')?></a>
+					<a class="btn-remove" title="<?=$this->escapeHtml($filter->getFilter()->getClearLinkText())?>" href="<?=$clearLinkUrl?>"><?=$this->escapeHtml($filter->getFilter()->getClearLinkText())?></a>
+				<?php else: ?>
+					<a class="btn-remove" href="<?=$filter->getRemoveUrl()?>" title="<?=$this->__('Remove This Item')?>">
+						&times;
+					</a>
+				<?php endif ?>
+			</li>
+		<?php endforeach ?>
+		</ol>
+	</div>
+<?php endif ?>

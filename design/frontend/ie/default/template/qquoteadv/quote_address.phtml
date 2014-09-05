@@ -1,0 +1,237 @@
+<?php
+
+// Get resources
+$email         = $this->getValue('email', 'billing') ?: $this->getCustomerEmail();
+$billingEmail  = $this->getValue('email', 'billing');
+$countryCode   = $this->getValue('country', 'billing') ?: $countryCode = Mage::getStoreConfig('general/country/default');
+$disableCheck = Mage::getStoreConfig('qquoteadv/general/disable_exist_account_check');
+?>
+<div class="box">
+	<header class="box-head">
+		<h2><?=$this->__('Enter Your Details to Get a Quote')?></h2>
+	</header>
+	<section class="box-content">
+
+		<ul class="form-list">
+
+			<?php if ($this->isCustomerLoggedIn() and ! empty($billingEmail)): ?>
+				<li class="control">
+					<div class="input-box">
+						<input type="radio" name="billing_address" value="use_default_billing" checked="checked" onclick="$('billing-new-address-form').hide();$('qquoteadv-shipping').hide();">
+					</div>
+					<label for="customer:use_default_billing"><?=$this->__('Default Address')?></label>
+
+					<br>
+
+					<div class="input-box">
+						<input type="radio" name="billing_address" value="use_new_billing" onclick="$('billing-new-address-form').show(); $('qquoteadv-shipping').show()">
+					</div>
+					<label for="customer:use_new_billing"><?php echo $this->__('New Address')?></label>
+				</li>
+			<?php endif ?>
+
+			<li id="billing-new-address-form" <?php if ($this->isCustomerLoggedIn() and ! empty($billingEmail)): ?>style="display:none;"<?php endif ?>>
+				<ul>
+					<li class="wide">
+						<label for="customer:client_request">
+							<?=$this->__('Comments Regarding Quote Request')?>
+						</label>
+						<div class="input-box">
+							<textarea name="customer[client_request]" id="customer:client_request" rows="5" class="input-text" placeholder="<?=$this->__('Please enter any comments that may help Industrial Evolution provide a quote to you.')?>"></textarea>
+						</div>
+					</li>
+
+					<li class="fields">
+						<div class="field">
+							<label class="required" for="customer:firstname">
+								<em>*</em>
+								<?=$this->__('First Name')?>
+							</label>
+							<div class="input-box">
+								<input type="text" name="customer[firstname]" value="<?=$this->getValue('firstname', 'billing')?>" id="customer:firstname" class="required-input input-text">
+							</div>
+						</div>
+						<div class="field">
+							<label class="required" for="customer:lastname">
+								<em>*</em>
+								<?=$this->__('Last Name')?>
+							</label>
+							<div class="input-box">
+								<input type="text" name="customer[lastname]" value="<?=$this->getValue('lastname', 'billing')?>" id="customer:lastname" class="required-input input-text">
+							</div>
+						</div>
+					</li>
+
+					<li>
+						<label class="required" for="customer:email">
+							<em>*</em>
+							<?=$this->__('Email Address')?>
+						</label>
+						<div class="input-box">
+							<input type="text" value="<?=$email?>" name="customer[email]" id="customer:email" class="validate-email required-entry input-text" <?php if ( ! empty($email)): ?>readonly="readonly"<?php endif ?>>
+							<span id="please-wait" class="is-hidden">
+								<img alt="<?=$this->__('Checking..')?>" src="<?=$this->getSkinUrl('images/ajax-loader.gif')?>">
+							</span>
+							<div class="is-hidden" id="email_message"></div>
+						</div>
+					</li>
+
+					<li class="fields">
+						<div class="field">
+							<label for="customer:company">
+								<?=$this->__('Company')?>
+							</label>
+							<div class="input-box">
+								<input type="text" name="customer[company]" value="" class="input-text" id="customer:company">
+							</div>
+						</div>
+						<div class="field">
+							<label for="customer:telephone" class="required">
+								<em>*</em>
+								<?=$this->__('Telephone')?>
+							</label>
+							<div class="input-box">
+								<input type="text" name="customer[telephone]" value="" class="input-text required-entry" id="customer:telephone">
+							</div>
+						</div>
+					</li>
+
+					<?php if ( ! Mage::getStoreConfig('qquoteadv/shipping_quote/require_shipping')): ?>
+						<li class="control">
+							<div class="input-box">
+								<input id="customer:request-shipping" type="checkbox" onclick="if(this.checked){ $('qquoteadv-shipping').show(); }else{ $('qquoteadv-shipping').hide(); } ">
+							</div>
+							<label for="customer:request-shipping">
+								<?=$this->__('Request a Shipping Quote')?>
+							</label>
+						</li>
+					<?php endif ?>
+
+				</ul>
+			</li>
+
+		</ul>
+
+	</section>
+</div>
+
+<div class="box" id="qquoteadv-shipping" <?php if (($this->isCustomerLoggedIn() and ! empty($billingEmail)) or ( ! $this->isCustomerLoggedIn() and ! Mage::getStoreConfig('qquoteadv/shipping_quote/require_shipping'))): ?>style="display: none;"<?php endif ?>>
+	<header class="box-head">
+		<h2><?=$this->__('Your Shipping Details')?></h2>
+	</header>
+	<div class="box-content">
+
+		<ul class="form-list">
+
+			<li class="fields">
+				<div class="field">
+					<label class="required" for="customer:address">
+						<em>*</em>
+						<?=$this->__('Address')?>
+					</label>
+					<div class="input-box">
+						<input type="text" name="customer[address]" value="<?=$this->getValue('address', 'billing')?>" id="customer:address" class="required-input input-text">
+					</div>
+				</div>
+				<div class="field">
+					<label class="required" for="customer:city">
+						<em>*</em>
+						<?=$this->__('City')?>
+					</label>
+					<div class="input-box">
+						<input type="text" name="customer[city]" value="<?=$this->getValue('city', 'billing')?>" id="customer:city" class="required-input input-text">
+					</div>
+				</div>
+			</li>
+
+			<li class="fields">
+				<div class="field">
+					<div class="field">
+						<label class="required" for="customer:postcode">
+							<em>*</em>
+							<?=$this->__('Zip/Postal Code')?>
+						</label>
+						<div class="input-box">
+							<input type="text" name="customer[postcode]" value="<?=$this->getValue('postcode', 'billing')?>" id="customer:postcode" class="required-input input-text">
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="field">
+						<label class="required">
+							<em>*</em>
+							<?=$this->__('State/Province')?>
+						</label>
+						<div class="input-box">
+							<select name='customer[region_id]' id="region_id" title="<?=$this->__('State/Province')?>" class="validate-select" style="display:none;">
+								<option value=""><?=$this->__('Please select region, state or province')?></option>
+							</select>
+							<input type="text" name="customer[region]" id="region" title="<?=$this->__('State/Province')?>" class="input-text" style="display:none;">
+						</div>
+					</div>
+				</div>
+			</li>
+
+			<li>
+				<label class="required" for="country">
+					<em>*</em>
+					<?=$this->__('Country')?>
+				</label>
+				<?=Mage::getBlockSingleton('directory/data')->getCountryHtmlSelect($countryCode, 'customer[country_id]', 'country', $this->__('Country'))?>	 
+			</li>
+
+		</ul>
+
+	</div>
+</div>
+
+<script>
+//<![CDATA[
+	var elmEmail    = $('customer:email');
+	var elmEmailMsg = $('email_message');
+	var btnSubm     = $('submitOrder');
+	if (elmEmail) {
+
+		Event.observe(elmEmail, 'keydown', function(event){ 
+			var e=event || window.event;
+			if(btnSubm) {
+				btnSubm.disabled=false;
+			}
+			if(e) {
+				if (e.keyCode == 13) return false;
+			}
+		});
+
+		Event.observe(elmEmail, 'click', function(event){ 
+			cssFailClass = 'validation-failed';
+			if( elmEmail.hasClassName(cssFailClass) ){
+				 elmEmail.removeClassName(cssFailClass);
+				 elmEmail.value='';
+
+				 elmEmailMsg.hide();
+				 elmEmailMsg.removeClassName('validation-advice');
+					
+				 if(btnSubm){	
+					btnSubm.setStyle({background: '#F18200'});
+					btnSubm.disabled=false;
+				 }
+			} 
+		});	 
+	}
+//]]>	
+</script>
+
+<?php if( ! $disableCheck): ?>
+	<script>
+	//<![CDATA[
+	var elmEmail = $('customer:email');
+	if (elmEmail) {
+		var url = '<?=$this->getUrl('qquoteadv/index/useJsEmail')?>';
+		var message = '<?=$this->__('Customer email already exists. You should login <a href=%s>here</a>', $this->getLoginUrl())?>';
+		
+		Event.observe(elmEmail, 'change', function(event) {
+			isExistUserEmail(event, url, message);
+		}); 
+	}//]]>
+	</script>
+<?php endif ?>

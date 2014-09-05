@@ -1,0 +1,105 @@
+<?php
+/**
+ * Category navigation
+ *
+ * @see Mage_Catalog_Block_Navigation
+ */
+
+$categories = $this->getStoreCategories();
+$helper     = $this->helper('catalog/output');
+$phone      = Mage::getStoreConfig('general/store_information/phone');
+$email      = Mage::getStoreConfig('contacts/email/recipient_email');
+$i          = 1;
+?>
+<?php if ($categories): ?>
+	<nav role="navigation">
+		<div class="centre-container">
+			<div class="top-level-container">
+				<div>
+
+					<ul class="top-level categories-<?=count($categories)?>">
+						<?php foreach ($categories as $category): ?>
+							<?php
+
+							// Find children categories
+							$childrenCategories = $this->getChildrenCategories($category);
+							$childrenCatgoriesCount = count($childrenCategories);
+							?>
+							<li class="top-level-item" data-category="<?=$category->getId()?>">
+
+								<?php
+
+								// If there are children categories, remove the link for the top category
+								if ($childrenCatgoriesCount > 0): ?>
+									<span class="is-block top-level-item-link <?=$this->isCategoryActive($category) ? 'active' : null?>" data-after="&nbsp;&#9662;">
+								<?php else: ?>
+									<a class="is-block top-level-item-link <?=$this->isCategoryActive($category) ? 'active' : null?>" href="<?=$this->getCategoryUrl($category)?>">
+								<?php endif ?>
+									<?=$helper->categoryAttribute($category, $category->getName(), 'name')?>
+								<?php if ($childrenCatgoriesCount > 0): ?>
+									</span>
+								<?php else: ?>
+									</a>
+								<?php endif ?>
+							</li>
+						<?php endforeach ?>
+					</ul>
+
+					<?php foreach ($categories as $category): ?>
+						<?php
+
+						// Find children categories
+						$childrenCategories = $this->getChildrenCategories($category);
+						?>
+						<?php if ($childrenCategories): ?>
+							<div class="dropdown" data-category="<?=$category->getId()?>">
+
+								<div class="dropdown-list-container">
+									<ul class="dropdown-list">
+										<?php foreach ($childrenCategories as $childCategory): ?>
+											<li class="dropdown-list-item-column">
+
+												<a href="<?=$this->getCategoryUrl($childCategory)?>" class="is-block box-inset-feature box-inset-small dropdown-list-item-link">
+													<img src="<?=$childCategory->getThumbnailUrl(134, 84)?>">
+
+													<div class="box-inset-feature-overlay">
+														<div class="box-inset-feature-overlay-actions">
+
+															<h3>
+																<?=$helper->categoryAttribute($childCategory, $childCategory->getName(), 'name')?>
+															</h3>
+
+														</div>
+													</div>
+												</a>
+
+											</li>
+										<?php endforeach ?>
+									</ul>
+								</div>
+
+								<footer class="dropdown-meta">
+
+									<h3 class="is-inline">
+										<?=$this->__('More Information')?>:
+									</h3>
+
+									<a class="icon-link phone" href="tel:<?=$phone?>">
+										<?=$phone?>
+									</a>
+
+									<a class="icon-link email" href="mailto:<?=$email?>?subject=<?=$this->__('Enquiry Regarding Your %s Range', $this->stripTags($helper->categoryAttribute($category, $category->getName(), 'name')))?>">
+										<?=$email?>
+									</a>
+
+								</footer>
+
+							</div>
+						<?php endif ?>
+					<?php endforeach ?>
+
+				</div>
+			</div>
+		</div>
+	</nav>
+<?php endif ?>

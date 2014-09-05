@@ -1,0 +1,83 @@
+<?php
+$productCollection = $this->getLoadedProductCollection();
+$helper            = $this->helper('catalog/output');
+$i                 = 0;
+$perRow            = 3;
+?>
+<?php if ( ! $productCollection->count()): ?>
+	<p class="note-msg">
+		<?=$this->__('There are no products matching the selection.')?>
+	</p>
+<?php else: ?>
+	<div class="category-products">
+		<?=$this->getToolbarHtml()?>
+
+		<?php foreach ($productCollection as $product): ?>
+			<?php if ($i % $perRow === 0): ?>
+				<ul class="products-grid">
+			<?php endif ?>
+			<li class="item-column">
+				<div class="box-inset item">
+
+					<div class="box-inset-feature item-thumbnail">
+						<a href="<?=$product->getProductUrl()?>" title="<?=$this->stripTags($this->getImageLabel($product, 'small_image'), null, true)?>">
+							<img src="<?=$this->helper('catalog/image')->init($product, 'small_image')->constrainOnly(false)->keepAspectRatio(false)->keepFrame(false)->adaptiveResize(158, 200)?>" alt="<?=$this->stripTags($this->getImageLabel($product, 'small_image'), null, true)?>">
+						</a>
+
+						<a class="box-inset-feature-overlay item-overlay" href="<?=$product->getProductUrl()?>">
+							<div class="box-inset-feature-overlay-actions">
+								<h4 class="item-overlay-actions-title">
+									View
+									<strong>More</strong>
+								</h4>
+							</div>
+						</a>
+					</div>
+
+					<h3 class="item-name">
+						<a href="<?=$product->getProductUrl()?>">
+							<?=$helper->productAttribute($product, $product->getName(), 'name')?>
+						</a>
+					</h3>
+
+					<article class="item-description std">
+						<?=Mage::helper('core/string')->truncate($helper->productAttribute($product, $product->getShortDescription(), 'short_description') ?: $helper->productAttribute($product, $product->getDescription(), 'description'), 155, '...', $remainder, false)?>
+					</article>
+
+					<div class="box-inset-absolute-bottom item-shop">
+						<?php if ($product->isSaleable()): ?>
+							<button type="button" title="<?=$this->__('Add to Cart')?>" class="btn btn-dark btn-cart" onclick="setLocation('<?=$this->getAddToCartUrl($product)?>');">
+								<em><em></em></em>
+								<?=$this->__('Add to Cart')?>
+							</button>
+						<?php endif ?>
+						<div class="price-box">
+							<span class="minimal-price">
+								<?=$this->helper('core')->currency($product->getMinimalPrice())?>
+							</span>
+							<div class="is-hidden real-price-box">
+								<?=$this->getPriceHtml($product, true)?>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</li>
+			<?php
+
+			// Close list on 3rd item
+			if ($i % $perRow === $perRow - 1): ?>
+				</ul>
+			<?php endif ?>
+		<?php
+
+		// Increase our counter
+		$i++;
+		endforeach;
+
+		// Close any opened lists
+		if ($i % $perRow < $perRow - 1): ?>
+			</ul>
+		<?php endif ?>
+	</div>
+<?php endif ?>

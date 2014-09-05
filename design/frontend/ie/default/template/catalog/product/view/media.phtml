@@ -1,0 +1,88 @@
+<?php
+/**
+ * Product media data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ */
+
+$product = $this->getProduct();
+$helper  = $this->helper('catalog/output');
+
+// Get the base image path
+$baseImageFile = ($product->getImage() != 'no_selection' and $product->getImage()) ? $product->getImage() : false;
+
+// Base image dimensions
+$baseImageDimensions = array(
+	'x' => 158,
+	'y' => 200,
+);
+
+// // Zoom scale
+// $zoomScale = 2.5;
+
+$enlargedImageDimensions = array(
+	'x' => 800,
+	'y' => 600,
+);
+
+$galleryImages = array();
+
+// Process the gallery images
+foreach ($this->getGalleryImages() as $image)
+{
+	if ($baseImageFile and $image->getFile() === $baseImageFile)
+	{
+		continue;
+	}
+
+	$galleryImages[] = $image;
+}
+?>
+
+<div class="product-media" <?php //  data-toggle="modal-gallery" data-target="#modal-gallery" ?>>
+
+	<?php if ($baseImageFile): ?>
+
+		<div class="box-inset product-media-base-image">
+			<div class="box-inset-feature">
+				<a href="<?=$this->helper('catalog/image')->init($product, 'image')->constrainOnly(true)->keepFrame(false)->resize($enlargedImageDimensions['x'], $enlargedImageDimensions['y'])?>" rel="gallery">
+					<img src="<?=$this->helper('catalog/image')->init($product, 'image')->constrainOnly(false)->keepAspectRatio(false)->keepFrame(false)->adaptiveResize($baseImageDimensions['x'], $baseImageDimensions['y'])?>" alt="<?=$this->htmlEscape($this->getImageLabel())?>">
+				</a>
+			</div>
+		</div>
+
+	<?php endif ?>
+
+	<?php if ($galleryImages): ?>
+		<h4 class="product-media-gallery-title">
+			<?=$this->__('Click Below for Larger Preview:')?>
+		</h4>
+
+		<ul class="product-media-gallery">
+			<?php foreach ($galleryImages as $image): ?>
+				<li class="product-media-gallery-image-column">
+					<div class="box-inset box-inset-small product-media-gallery-image">
+						<a class="is-block box-inset-feature box-inset-small" href="<?=$this->helper('catalog/image')->init($this->getProduct(), 'image', $image->getFile())->constrainOnly(true)->keepFrame(false)->resize($enlargedImageDimensions['x'], $enlargedImageDimensions['y'])?>" rel="gallery">
+							<img src="<?=$this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $image->getFile())->constrainOnly(false)->keepAspectRatio(false)->keepFrame(false)->adaptiveResize(48, 77)?>" alt="<?=$this->htmlEscape($image->getLabel())?>">
+						</a>
+					</div>
+				</li>
+			<?php endforeach ?>
+		</ul>
+	<?php endif ?>
+
+</div>
+<!-- 
+<div id="modal-gallery" class="modal modal-gallery hide fade">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">&times;</a>
+		<h3 class="modal-title"></h3>
+	</div>
+	<div class="modal-body"><div class="modal-image"></div></div>
+	<div class="modal-footer">
+		<a class="btn btn-primary modal-next">Next <i class="icon-arrow-right icon-white"></i></a>
+		<a class="btn btn-info modal-prev"><i class="icon-arrow-left icon-white"></i> Previous</a>
+		<a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000"><i class="icon-play icon-white"></i> Slideshow</a>
+		<a class="btn modal-download" target="_blank"><i class="icon-download"></i> Download</a>
+	</div>
+</div> -->

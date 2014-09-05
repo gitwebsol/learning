@@ -1,0 +1,20 @@
+<?php
+$product     = $this->getProduct();
+$buttonTitle = $this->__('Add to Cart');
+?>
+<?php if ($product->isSaleable()): ?>
+	<div class="add-to-cart form-inline">
+
+		<?php if ( ! $product->isGrouped()): ?>
+			<label for="qty"><?=$this->__('Qty:')?></label>
+			<input type="text" name="qty" id="qty" maxlength="12" value="<?=$this->getProductDefaultQty() * 1?>" title="<?=$this->__('Qty')?>" class="input-text input-mini no-margin qty">
+		<?php endif ?>
+
+		<button type="button" title="<?=$buttonTitle?>" class="btn btn-dark btn-cart" onclick="productAddToCartForm.submit(this)">
+			<em><em></em></em>
+			<?=$buttonTitle?>
+		</button>
+
+		<?=$this->getChildHtml('', true, true)?>
+	</div>
+<?php endif ?>

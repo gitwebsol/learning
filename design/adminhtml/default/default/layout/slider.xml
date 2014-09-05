@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+
+	<!-- Start: Adding grid container to the sliders grid page -->
+	<slider_adminhtml_sliders_index>
+		<reference name="content">
+			<block type="slider/adminhtml_sliders" name="slider.adminhtml.sliders"/>
+		</reference>
+	</slider_adminhtml_sliders_index>
+	<!-- Start: Adding grid container to the sliders grid page -->
+
+
+	<!-- Start: Adding edit blocks to the slide edit page -->
+	<slider_adminhtml_sliders_edit>
+		<reference name="left">
+			<block type="slider/adminhtml_sliders_edit_tabs" name="slider.adminhtml.sliders.edit.tabs"/>
+		</reference>
+		<reference name="content">
+			<block type="slider/adminhtml_sliders_edit" name="slider.adminhtml.sliders.edit"/>
+		</reference>
+	</slider_adminhtml_sliders_edit>
+	<!-- End: Adding edit blocks to the slide edit page -->
+
+
+</layout>

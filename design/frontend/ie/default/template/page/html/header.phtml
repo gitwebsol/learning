@@ -1,0 +1,45 @@
+<header role="banner">
+
+	<div class="centre-container">
+		
+		<div class="logo-header-column">
+			<h1 id="logo">
+				<a href="<?=$this->getUrl('')?>">
+					<img src="<?=$this->getLogoSrc()?>" alt="<?=$this->getLogoAlt()?>">
+				</a>
+			</h1>
+		</div>
+
+		<div class="header-jank-column">
+			
+			<div class="clearfix">
+				<div class="site-toolbar">
+
+					<div class="site-toolbar-inner">
+
+						<div class="site-toolbar-section site-toolbar-dark no-padding">
+							<?=$this->getChildHtml('topSearch')?>
+						</div>
+
+						<div class="site-toolbar-section">
+							<?=$this->getChildHtml('topLinks')?>
+						</div>
+
+						<div class="site-toolbar-section site-toolbar-dark">
+							<?=$this->getChildHtml('shopping_links')?>
+						</div>
+						
+					</div>
+
+				</div>
+			</div>
+
+			<nav class="shortcut-nav">
+				<?=$this->getChildHtml('shortcut.nav')?>
+			</nav>
+
+		</div>
+
+	</div>
+
+</header>

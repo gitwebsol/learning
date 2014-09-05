@@ -1,0 +1,19 @@
+<div class="block block-tags">
+	<div class="block-title">
+		<strong><span><?=$this->__('Popular Tags')?>></span></strong>
+	</div>
+	<div class="block-content">
+		<ul class="no-margin list-inline tags-list">
+			<?php foreach ($this->getTags() as $tag): ?>
+				<li>
+					<a href="<?=$tag->getTaggedProductsUrl() ?>" style="font-size:<?=$tag->getRatio()*70+75 ?>%;">
+						<?=$this->htmlEscape($tag->getName())?>
+					</a>
+				</li>
+			<?php endforeach ?>
+		</ul>
+		<div class="actions">
+			<a href="<?=$this->getUrl('tag/list') ?>"><?=$this->__('View All Tags')?></a>
+		</div>
+	</div>
+</div>

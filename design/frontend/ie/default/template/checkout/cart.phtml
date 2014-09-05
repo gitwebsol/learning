@@ -1,0 +1,116 @@
+<div class="cart">
+	<header class="page-title title-buttons">
+		<h1><?=$this->__('Shopping Cart')?></h1>
+
+		<?php if ( ! $this->hasError()): ?>
+			<ul class="checkout-types no-margin">
+				<?php foreach ($this->getMethods('top_methods') as $method): ?>
+					<?php if ($html = $this->getMethodHtml($method)): ?>
+						<li>
+							<?=$html?>
+						</li>
+					<?php endif ?>
+				<?php endforeach ?>
+			</ul>
+		<?php endif ?>
+	</header>
+
+	<?=$this->getMessagesBlock()->getGroupedHtml()?>
+	<?=$this->getChildHtml('form_before')?>
+
+	<form action="<?=$this->getUrl('checkout/cart/updatePost')?>" method="post">
+		<table id="shopping-cart-table" class="table table-bordered table-striped cart-table">
+
+			<?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1)?>
+
+			<thead>
+				<tr>
+					<th rowspan="<?=$mergedCells?>">&nbsp;</th>
+					<th rowspan="<?=$mergedCells?>"><span class="nobr"><?=$this->__('Product Name')?></span></th>
+					<th rowspan="<?=$mergedCells?>" class="no-border"></th>
+					<?php if ($this->helper('wishlist')->isAllowInCart()): ?>
+						<th rowspan="<?=$mergedCells?>" class="a-center"><span class="nobr"><?=$this->__('Move to Wishlist')?></span></th>
+					<?php endif ?>
+					<th class="a-center" colspan="<?=$mergedCells?>"><span class="nobr"><?=$this->__('Unit Price')?></span></th>
+					<th rowspan="<?=$mergedCells?>" class="a-center"><?=$this->__('Qty')?></th>
+					<th class="a-center" colspan="<?=$mergedCells?>"><?=$this->__('Subtotal')?></th>
+					<th rowspan="<?=$mergedCells?>" class="a-center">&nbsp;</th>
+				</tr>
+				<?php if ($this->helper('tax')->displayCartBothPrices()): ?>
+					<tr>
+						<th class="a-right"><?=$this->helper('tax')->getIncExcTaxLabel(false)?></th>
+						<th><?=$this->helper('tax')->getIncExcTaxLabel(true)?></th>
+						<th class="a-right"><?=$this->helper('tax')->getIncExcTaxLabel(false)?></th>
+						<th><?=$this->helper('tax')->getIncExcTaxLabel(true)?></th>
+					</tr>
+				<?php endif ?>
+			</thead>
+			<tbody>
+				<?php foreach($this->getItems() as $item): ?>
+					<?=$this->getItemHtml($item)?>
+				<?php endforeach?>
+			</tbody>
+		</table>
+
+		<div class="feature-bar">
+
+			<?php if ($this->getContinueShoppingUrl()): ?>
+				<button type="button" title="<?=$this->__('Continue Shopping')?>" class="btn btn-dark cart-btn-continue btn-continue" onclick="setLocation('<?=$this->getContinueShoppingUrl()?>')">
+					<?=$this->__('Continue Shopping')?>
+				</button>
+			<?php endif ?>
+
+			<div class="pull-right">
+				<button type="submit" name="update_cart_action" value="update_qty" title="<?=$this->__('Update Cart')?>" class="btn btn-dark btn-update cart-btn-update">
+					<em><em></em></em>
+					<?=$this->__('Update Cart')?>
+				</button>
+
+				<button type="submit" name="update_cart_action" value="empty_cart" title="<?=$this->__('Clear Cart')?>" class="btn btn-dark cart-btn-empty btn-empty" id="empty_cart_button"><span><span><?=$this->__('Clear Cart')?></span></span></button>
+			</div>
+
+		</div>
+	</form>
+
+	<div class="cart-collateral">
+
+		<div class="shipping-column">
+			<?=( ! $this->getIsVirtual()) ? $this->getChildHtml('shipping') : '&nbsp;'?>
+		</div>
+
+		<div class="coupon-column">
+			<?=$this->getChildHtml('coupon')?>
+		</div>
+
+		<div class="totals-column">
+
+			<div class="totals">
+				<div class="box">
+					<div class="box-content no-padding">
+
+						<?=$this->getChildHtml('totals')?>
+
+						<?php if ( ! $this->hasError()): ?>
+							<ul class="no-margin checkout-types">
+								<?php foreach ($this->getMethods('methods') as $method): ?>
+									<?php if ($html = $this->getMethodHtml($method)): ?>
+										<li>
+											<?=$html?>
+										</li>
+									<?php endif ?>
+								<?php endforeach?>
+							</ul>
+						<?php endif ?>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="align-centre">
+				<?=$this->getChildHtml('qquoteadv.checkoutquotebtn')?>
+			</div>
+
+		</div>
+
+	</div>
+</div>

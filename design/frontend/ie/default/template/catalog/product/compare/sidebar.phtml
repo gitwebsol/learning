@@ -1,0 +1,41 @@
+<?php
+/* @var $this Mage_Catalog_Block_Product_Compare_Sidebar */
+
+$helper = $this->helper('catalog/product_compare');
+$items  = $helper->getItemCount() > 0 ? $helper->getItemCollection() : null;
+?>
+<div class="block block-list block-compare">
+	<div class="block-title">
+		<strong>
+			<span>
+				<?=$this->__('Compare')?>
+				<em><?=$this->__('Products')?></em>
+			</span>
+		</strong>
+	</div>
+	<div class="block-content">
+		<?php if ($helper->getItemCount() > 0): ?>
+			<ol id="compare-items">
+				<?php foreach ($items as $index => $item): ?>
+					<li class="item">
+						<input type="hidden" class="compare-item-id" value="<?=$item->getId()?>">
+						<a href="<?=$helper->getRemoveUrl($item)?>" title="<?=$this->__('Remove This Item')?>" class="btn-remove" onclick="return confirm('<?=$this->__('Are you sure you would like to remove this item from the compare products?')?>');">
+							&times;
+						</a>
+						<p class="product-name"><a href="<?=$this->getProductUrl($item)?>"><?=$this->helper('catalog/output')->productAttribute($item, $item->getName(), 'name')?></a></p>
+					</li>
+				<?php endforeach ?>
+			</ol>
+
+			<div class="actions">
+				 <button type="button" title="<?=$this->__('Compare')?>" class="btn btn-compare" onclick="popWin('<?=$helper->getListUrl()?>','compare','top:0,left:0,width=820,height=600,resizable=yes,scrollbars=yes')">
+					<em><em></em></em>
+					<?=$this->__('Compare')?>
+				 </button>
+				<a href="<?=$helper->getClearListUrl()?>" onclick="return confirm('<?=$this->__('Are you sure you would like to remove all products from your comparison?')?>');"><?=$this->__('Clear All')?></a>
+			</div>
+		<?php else: ?>
+			<p class="empty"><?=$this->__('You have no items to compare.')?></p>
+		<?php endif ?>
+	</div>
+</div>

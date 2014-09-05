@@ -1,0 +1,172 @@
+<?php
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+
+$helper     = $this->helper('catalog/output');
+$product    = $this->getProduct();
+$collateral = $this->getChildGroup('detailed_info', 'getChildHtml');
+$i          = 0;
+$j          = 0;
+?>
+<script>
+var optionsPrice = new Product.OptionsPrice(<?=$this->getJsonConfig()?>);
+</script>
+<div id="messages_product_view">
+	<?=$this->getMessagesBlock()->getGroupedHtml()?>
+</div>
+<div class="product-view">
+
+	<section class="product-essential">
+
+		<form action="<?=$this->getSubmitUrl($product)?>" method="post" id="product-addtocart-form"<?php if($product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?> class="no-margin">
+
+			<div class="product-media-column">
+				<?=$this->getChildHtml('media')?>
+			</div>
+
+			<div class="product-focus-column">
+				<div class="product-focus">
+					
+					<section class="product-focus-section product-focus-top">
+
+						<div class="product-information-column">
+							<div class="clearfix product-information">
+								
+								<header class="page-title product-name">
+									<h1><?=$helper->productAttribute($product, $product->getName(), 'name')?></h1>
+								</header>
+
+								<?=$this->getChildHtml('top.product.description')?>
+
+							</div>
+						</div>
+
+						<div class="clearfix product-shop-column">
+							<div class="product-shop">
+								<?=$this->getChildHtml('product_type_data')?>
+
+								<?php if ($product->isSaleable() and $this->hasOptions()): ?>
+									<?=$this->getChildChildHtml('container1', '', true, true)?>
+									<?=$this->getChildChildHtml('container2', '', true, true)?>
+								<?php endif ?>
+							</div>
+						</div>
+
+					</section>
+
+					<div class="feature-bar">
+						<section class="product-focus-section product-focus-middle">
+
+							<div class="add-to-column <?=( ! $product->isSaleable()) ? 'is-full-width' : null?>">
+								<?=$this->getChildHtml('addto')?>
+							</div>
+
+							<div class="add-to-cart-column">
+								<?php if ($product->isSaleable()): ?>
+									<?=$this->getChildHtml('addtocart')?>
+								<?php endif ?>
+							</div>
+
+						</section>
+					</div>
+
+					<section class="product-focus-section product-focus-bottom">
+						
+						<div class="facebook-like-column">
+							<?=$this->getChildHtml('facebook')?>
+						</div>
+
+					</section>
+
+				</div>
+			</div>
+
+		</form>
+
+	</section>
+
+	<script>
+	//<![CDATA[
+		var productAddToCartForm = new VarienForm('product-addtocart-form');
+		productAddToCartForm.submit = function(button, url) {
+			if (this.validator.validate()) {
+				var form = this.form;
+				var oldUrl = form.action;
+
+				if (url) {
+				   form.action = url;
+				}
+				var e = null;
+				try {
+					this.form.submit();
+				} catch (e) {
+				}
+				this.form.action = oldUrl;
+				if (e) {
+					throw e;
+				}
+
+				if (button && button != 'undefined') {
+					button.disabled = true;
+				}
+			}
+		}.bind(productAddToCartForm);
+
+		productAddToCartForm.submitLight = function(button, url){
+			if(this.validator) {
+				var nv = Validation.methods;
+				delete Validation.methods['required-entry'];
+				delete Validation.methods['validate-one-required'];
+				delete Validation.methods['validate-one-required-by-name'];
+				// Remove custom datetime validators
+				for (var methodName in Validation.methods) {
+					if (methodName.match(/^validate-datetime-.*/i)) {
+						delete Validation.methods[methodName];
+					}
+				}
+
+				if (this.validator.validate()) {
+					if (url) {
+						this.form.action = url;
+					}
+					this.form.submit();
+				}
+				Object.extend(Validation.methods, nv);
+			}
+		}.bind(productAddToCartForm);
+	//]]>
+	</script>
+
+	<?php if (count($collateral) > 0): ?>
+		<section class="product-collateral product-tabs" id="product-tabs">
+			<nav class="product-tabs-header">
+				<ul class="no-margin list-inline">
+					<?php foreach ($collateral as $alias => $html): ?>
+						<li class="tab-link-container">
+							<a class="tab-link is-block <?=$i++ === 0 ? 'active' : null?>" data-tab-link="<?=$alias?>" href="#product-tab-<?=$alias?>">
+								<h2><?=$this->escapeHtml($this->getChildData($alias, 'title'))?></h2>
+							</a>
+						</li>
+					<?php endforeach ?>
+				</ul>
+			</nav>
+
+			<section class="product-tabs-content">
+				<ul class="no-margin">
+					<?php foreach ($collateral as $alias => $html): ?>
+						<li class="tab-content <?=$j++ === 0 ? 'active' : null?>" data-tab-content="<?=$alias?>" id="product-tab-<?=$alias?>">
+							<?=$html?>
+						</li>
+					<?php endforeach ?>
+				</ul>
+			</section>
+
+		</section>
+	<?php endif ?>
+
+	<?=$this->getChildHtml('catalog.product.related')?>
+</div>

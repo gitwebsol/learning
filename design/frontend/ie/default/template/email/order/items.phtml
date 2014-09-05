@@ -1,0 +1,49 @@
+<?php $order = $this->getOrder() ?>
+<?php if ($order): ?>
+<table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
+	<thead>
+		<tr>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px">&nbsp;</th>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Item')?></th>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Sku')?></th>
+			<th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Qty')?></th>
+			<th align="right" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?=$this->__('Subtotal')?></th>
+		</tr>
+	</thead>
+
+	<?php $i=0; foreach ($order->getAllItems() as $item): ?>
+	<?php if ($item->getParentItem()) continue; else $i++; ?>
+	<tbody<?=$i%2 ? ' bgcolor="#F6F6F6"' : ''?>>
+		<?=$this->getItemHtml($item)?>
+	</tbody>
+	<?php endforeach ?>
+
+	<tbody>
+		<?=$this->getChildHtml('order_totals')?>
+	</tbody>
+</table>
+<?php if ($this->helper('giftmessage/message')->isMessagesAvailable('order', $order, $order->getStore()) and $order->getGiftMessageId()): ?>
+	<?php $giftMessage = $this->helper('giftmessage/message')->getGiftMessage($order->getGiftMessageId()); ?>
+	<?php if ($giftMessage): ?>
+<br />
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #EAEAEA;">
+	<thead>
+		<tr>
+			<th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><strong><?=$this->__('Gift Message for this Order')?></strong></th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		<tr>
+			<td colspan="5" align="left" style="padding:3px 9px">
+			<strong><?=$this->__('From:');?></strong> <?=$this->htmlEscape($giftMessage->getSender())?>
+			<br /><strong><?=$this->__('To:');?></strong> <?=$this->htmlEscape($giftMessage->getRecipient())?>
+			<br /><strong><?=$this->__('Message:');?></strong><br /> <?=$this->htmlEscape($giftMessage->getMessage())?>
+			</td>
+		</tr>
+	</tbody>
+</table>
+	<?php endif ?>
+<?php endif ?>
+<?php endif ?>

@@ -1,0 +1,683 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * Industrial Evolution is an Australian
+ * owned Industrial Design and Engineering 
+ * company based in Sydney. Creating innovative
+ * product design and manufacturing for local
+ * and international customers. Industrial
+ * Evolution has brought various design
+ * solutions for clients with fleet, forklift
+ * and warehouse technology issues, by taking a
+ * needs-based consultative approach.
+ * 
+ * @package     Magento
+ * @subpackage  Industrial Evolution
+ * @author      Webcomm (Ben Corlett)
+ * @link        http://www.webcomm.com.au
+ * @copyright   Copyright (c) 2012
+ * @license     See License.txt
+ */
+ -->
+<layout version="0.1.0">
+
+
+	<!-- Start: Default handle -->
+	<default>
+
+
+		<reference name="root">
+
+
+			<!-- Start: Setting default template -->
+			<action method="setTemplate">
+				<template>page/2columns-right.phtml</template>
+			</action>
+
+
+			<!-- Start: Add our custom navigation below the header -->
+			<block type="catalog/navigation" name="catalog.navigation" as="nav" template="catalog/navigation/top.phtml"/>
+
+
+			<!-- Start: Add header shadow -->
+			<block type="core/template" name="header.shadow" as="header_shadow" template="page/html/header-shadow.phtml"/>
+
+
+			<!-- Start: Add bottom nav footer to the template, it's a black bar above the footer -->
+			<block type="core/template" name="bottom-nav" template="page/html/bottom-nav.phtml">
+				<block type="page/template_links" name="shortcut.nav" as="shortcut_nav">
+					<action method="addLink" translate="label title">
+						<label>About</label>
+						<url>about-us</url>
+						<title>About</title>
+						<prepare>true</prepare>
+						<urlParams/>
+						<position>10</position>
+					</action>
+					<action method="addLink" translate="label title">
+						<label>Our Products</label>
+						<url>products</url>
+						<title>Our Products</title>
+						<prepare>true</prepare>
+						<urlParams/>
+						<position>20</position>
+						<liParams/>
+						<aParams><![CDATA[id="products"]]></aParams>
+					</action>
+					<action method="addLink" translate="label title">
+						<label>Catalogues</label>
+						<url>catalogues</url>
+						<title>Catalogues</title>
+						<prepare>true</prepare>
+						<urlParams/>
+						<position>30</position>
+					</action>
+					<!-- <action method="addLink" translate="label title">
+						<label>Services On Offer</label>
+						<url>services</url>
+						<title>Services On Offer</title>
+						<prepare>true</prepare>
+						<urlParams/>
+						<position>30</position>
+					</action> -->
+					<action method="addLink" translate="label title">
+						<label>Contact Us</label>
+						<url>contacts</url>
+						<title>Contact Us</title>
+						<prepare>true</prepare>
+						<urlParams/>
+						<position>40</position>
+					</action>
+				</block>
+			</block>
+
+
+		</reference>
+
+
+		<reference name="head">
+
+
+			<!-- Start: Removing Magento assets -->
+			<action method="removeItem">
+				<type>skin_css</type>
+				<name>css/print.css</name>
+			</action>
+			<action method="removeItem">
+				<type>skin_css</type>
+				<name>css/styles-ie.css</name>
+			</action>
+			<action method="removeItem">
+				<type>skin_css</type>
+				<name>css/styles.css</name>
+			</action>
+			<action method="removeItem">
+				<type>skin_css</type>
+				<name>css/widgets.css</name>
+			</action>
+			<action method="removeItem">
+				<type>skin_js</type>
+				<name>js/ie6.js</name>
+			</action>
+			<action method="removeItem">
+				<type>js</type>
+				<name>lib/ds-sleight.js</name>
+			</action>
+			<action method="removeItem">
+				<type>js</type>
+				<name>varien/menu.js</name>
+			</action>
+
+
+			<!-- Start: Adding our new assets -->
+			<action method="addCss">
+				<stylesheet>css/style.css</stylesheet>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/modernizr-2.5.3.custom.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/jquery-1.7.2.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/nwmatcher-1.2.5.min.js</name>
+				<params/>
+				<if>lt IE 9</if>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/selectivizr-1.0.2.min.js</name>
+				<params/>
+				<if>lt IE 9</if>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/jquery/hoverintent-r6.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/loadimage.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/bootstrap.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/script.js</name>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="top.links">
+
+
+			<!-- Start: Remove un-needed top links -->
+			<remove name="wishlist_link"/>
+			<remove name="checkout_cart_link"/>
+			<action method="removeLinkByUrl">
+				<url helper="customer/getAccountUrl"/>
+			</action>
+			<remove name="qquoteadv_links"/>
+
+
+			<!-- Start: Re-add the customer link with a class -->
+			<action method="addLink" translate="label title" module="customer">
+				<label>My Account</label>
+				<url helper="customer/getAccountUrl"/>
+				<title>My Account</title>
+				<prepare/>
+				<urlParams/>
+				<position>10</position>
+				<liParams/>
+				<aParams><![CDATA[class="link-icon top-link-account"]]></aParams>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="header">
+
+
+			<!-- Start: Add shopping links block to the header -->
+			<block type="page/template_links" name="shopping.links" as="shopping_links">
+				<block type="checkout/links" name="shopping.links.checkout_links">
+					<action method="addCartLink"/>
+					<action method="addCheckoutLink"/>
+				</block>
+				<block type="qquoteadv/links" name="quote_link">
+					<action ifconfig="qquoteadv/general/enabled" method="addQuoteLink"/>
+				</block>
+			</block>
+
+
+			<!-- Start: Adding shortcut nav to the header -->
+			<action method="insert">
+				<block>shortcut.nav</block>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="left">
+
+
+			<!-- Start: Remove callouts -->
+			<!-- <remove name="left.permanent.callout"/> -->
+			<remove name="right.permanent.callout"/>
+
+
+			<!-- Start: Remove newsletter -->
+			<remove name="left.newsletter"/>
+
+
+			<!-- Start: Add contacts sidebar -->
+			<block type="core/template" name="contacts.sidebar" template="contacts/sidebar.phtml"/>
+
+
+		</reference>
+
+
+		<reference name="right">
+
+
+			<!-- Start: Remove stuff from the right sidebar -->
+			<remove name="right.poll"/>
+			<remove name="paypal.partner.right.logo"/>
+
+
+			<!-- Start: Add callout to right -->
+			<action method="insert">
+				<block>left.permanent.callout</block>
+			</action>
+			<!-- Start: Add callout to right -->
+
+
+		</reference>
+
+
+		<reference name="footer">
+
+
+			<!-- Start: Add footer navigation -->
+			<block type="cms/block" name="footer.nav" as="footer_nav">
+				<action method="setBlockId">
+					<block_id>footer_nav</block_id>
+				</action>
+			</block>
+
+
+		</reference>
+
+
+	</default>
+	<!-- Start: Default handle -->
+
+
+	<!-- Start: Category page (non-layered) -->
+	<catalog_category_default>
+
+
+		<reference name="root">
+
+
+			<!-- Start: Setting default template -->
+			<action method="setTemplate">
+				<template>page/2columns-left.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="product_list">
+
+
+			<!-- Start: Take our product list template back -->
+			<action method="setTemplate">
+				<template>catalog/product/list.phtml</template>
+			</action>
+
+		</reference>
+
+
+	</catalog_category_default>
+	<!-- Start: Category page (non-layered) -->
+
+
+
+	<!-- Start: Category page (layered) -->
+	<catalog_category_layered>
+
+
+		<reference name="root">
+
+
+			<!-- Start: Setting default template -->
+			<action method="setTemplate">
+				<template>page/2columns-left.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="product_list">
+
+
+			<!-- Start: Take our product list template back -->
+			<action method="setTemplate">
+				<template>catalog/product/list.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+	</catalog_category_layered>
+	<!-- Start: Category page (layered) -->
+
+
+	<!-- Start: Product view page -->
+	<catalog_product_view>
+
+
+		<reference name="root">
+
+
+			<!-- Start: Setting default template -->
+			<action method="setTemplate">
+				<template>page/1column.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="head">
+
+
+			<!-- Start: Adding our new assets -->
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/jquery/zoomy-1.3.3.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/jquery/fancybox-2.1.1.pack.js</name>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="right">
+
+
+			<!-- Start: Remove related products from right, we're moving them to the center -->
+			<action method="unset">
+				<block>catalog.product.related</block>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="product.info">
+
+
+			<!-- Start: Add Facebook like button -->
+			<block type="core/template" name="product.info.facebook" as="facebook" template="facebooklb/like.phtml"/>
+
+
+			<!-- Start: Add "Whats included" -->
+			<block type="template/catalog_product_view_whatsincluded" name="product.info.whats.included" as="whats_included" template="catalog/product/view/whatsincluded.phtml" before="-">
+				<action method="addToParentGroup">
+					<group>detailed_info</group>
+				</action>
+
+				<action method="setTitle">
+					<title><![CDATA[What's Included]]></title>
+				</action>
+			</block>
+
+
+			<!-- Start: Add product tags block to the tabs -->
+			<block type="tag/product_list" name="product.tag.list" template="tag/list.phtml">
+				<block type="page/html_wrapper" name="product.tag.list.before" as="list_before" translate="label">
+					<label>Tags List Before</label>
+					<action method="setMayBeInvisible"><value>1</value></action>
+				</block>
+
+				<action method="setTitle">
+					<title>Product Tags</title>
+				</action>
+
+				<action method="addToParentGroup">
+					<group>detailed_info</group>
+				</action>
+			</block>
+			<!-- Start: Add product tags block to the tabs -->
+
+
+			<!-- Start: Add related products -->
+			<action method="insert">
+				<block>catalog.product.related</block>
+			</action>
+
+
+			<!-- Start: Reset product description -->
+			<remove name="product.description"/>
+			<block type="catalog/product_view_description" name="top.product.description" template="catalog/product/view/description.phtml"/>
+
+
+		</reference>
+
+
+		<reference name="product.attributes">
+
+
+			<!-- Start: Add title to the additional data block -->
+			<action method="setTitle">
+				<title>Additional Data</title>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="product.info.options.wrapper.bottom">
+
+
+			<!-- Start: Removing stuff from underneath the product options -->
+			<remove name="product.clone_prices"/>
+			<action method="unsetChild">
+				<block>product.info.addtocart</block>
+			</action>
+			<action method="unsetChild">
+				<block>product.info.addto</block>
+			</action>
+
+
+		</reference>
+
+
+
+	</catalog_product_view>
+
+
+	<!-- Start: Cart page -->
+	<checkout_cart_index>
+
+
+		<reference name="content">
+
+
+			<!-- Start: Remove (temporarily) "Copy to Quotation" button -->
+			<action method="unsetChild">
+				<child>qquoteadv.checkoutquotebtn</child>
+			</action>
+
+
+		</reference>
+
+
+		<reference name="checkout.cart">
+
+
+			<!-- Start: Reinsert the "Copy to Quotation" button -->
+			<action method="insert">
+				<block>qquoteadv.checkoutquotebtn</block>
+			</action>
+
+
+		</reference>
+
+
+	</checkout_cart_index>
+
+
+	<!-- Start: Catalog search results page -->
+	<catalogsearch_result_index>
+
+
+		<reference name="root">
+
+
+			<!-- Start: Set template -->
+			<action method="setTemplate">
+				<template>page/2columns-left.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+	</catalogsearch_result_index>
+
+
+	<!-- Start: Customer account page -->
+	<customer_account>
+
+
+		<!-- Start: Modify the account navigation -->
+		<reference name="customer_account_navigation">
+			<action method="removeLinkByName">
+				<name>billing_agreements</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>recurring_profiles</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>reviews</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>tags</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>wishlist</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>downloadable_products</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>OAuth Customer Tokens</name>
+			</action>
+			<action method="removeLinkByName">
+				<name>newsletter</name>
+			</action>
+			<action method="addLink">
+				<name>logout</name>
+				<path>customer/account/logout</path>
+				<label>Logout</label>
+			</action>
+		</reference>
+
+
+	</customer_account>
+
+
+	<!-- Start: Search results (simple) -->
+	<catalogsearch_result_index>
+
+
+		<reference name="search_result_list">
+
+
+			<!-- Start: Take our product list template back -->
+			<action method="setTemplate">
+				<template>catalog/product/list.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+	</catalogsearch_result_index>
+
+
+	<!-- Start: Search results (advanced) -->
+	<catalogsearch_result_index>
+
+
+		<reference name="search_result_list">
+
+
+			<!-- Start: Take our product list template back -->
+			<action method="setTemplate">
+				<template>catalog/product/list.phtml</template>
+			</action>
+
+
+		</reference>
+
+
+	</catalogsearch_result_index>
+
+
+	<!-- Start: Sales order email -->
+	<sales_email_order_items>
+
+
+		<reference name="order_totals">
+
+
+			<!-- Start: Change colspan -->
+			<action method="setLabelProperties">
+				<value>colspan="4" align="right" style="padding:3px 9px"</value>
+			</action>
+
+
+		</reference>
+
+
+	</sales_email_order_items>
+
+
+	<!-- Start: Sales invoice email -->
+	<sales_email_order_invoice_items>
+
+
+		<reference name="order_totals">
+
+
+			<!-- Start: Change colspan -->
+			<action method="setLabelProperties">
+				<value>colspan="4" align="right" style="padding:3px 9px"</value>
+			</action>
+
+
+		</reference>
+
+
+	</sales_email_order_invoice_items>
+
+
+	<!-- Start: Sales credit memo email -->
+	<sales_email_order_creditmemo_items>
+
+
+		<reference name="order_totals">
+
+
+			<!-- Start: Change colspan -->
+			<action method="setLabelProperties">
+				<value>colspan="4" align="right" style="padding:3px 9px"</value>
+			</action>
+
+
+		</reference>
+
+
+	</sales_email_order_creditmemo_items>
+
+
+	<!-- Start: Contact page -->
+	<contacts_index_index>
+
+
+		<reference name="contactForm">
+
+
+			<!-- Start: Allow a CMS block in the contact form -->
+			<block type="cms/block" name="contact.form.block" as="cms">
+				<action method="setBlockId">
+					<block_id>contact_page</block_id>
+				</action>
+			</block>
+
+
+		</reference>
+
+
+	</contacts_index_index>
+
+
+</layout>

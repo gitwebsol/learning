@@ -1,0 +1,85 @@
+<?php
+$helper = $this->helper('catalog/output');
+$i      = 0;
+$perRow = 4;
+?>
+<?php if ($this->getItems()->getSize()): ?>
+	<div class="related-products">
+		<h2><?=$this->__('You Might Also Be Interested In')?></h2>
+		<?php foreach ($this->getItems() as $item): ?>
+			<?php if ($i % $perRow === 0): ?>
+				<ul class="products-grid products-grid-full-width">
+			<?php endif ?>
+			<li class="item-column">
+				<div class="box-inset item">
+
+					<div class="box-inset-feature item-thumbnail">
+						<a href="<?=$item->getProductUrl()?>" title="<?=$this->stripTags($this->getImageLabel($item, 'small_image'), null, true)?>">
+							<img src="<?=$this->helper('catalog/image')->init($item, 'small_image')->constrainOnly(false)->keepAspectRatio(false)->keepFrame(false)->adaptiveResize(160, 200)?>" alt="<?=$this->stripTags($this->getImageLabel($item, 'small_image'), null, true)?>">
+
+						</a>
+
+						<div class="box-inset-feature-overlay item-overlay">
+							<div class="box-inset-feature-overlay-actions">
+								<h4 class="item-overlay-actions-title">
+									<a href="<?=$item->getProductUrl()?>">
+										View
+										<strong>More</strong>
+									</a>
+								</h4>
+								<?php if ($item->isSaleable()): ?>
+									<button type="button" title="<?=$this->__('Add to Cart')?>" class="btn btn-blue btn-glow btn-cart" onclick="setLocation('<?=$this->getAddToCartUrl($item)?>');">
+										<?=$this->__('Add to Cart')?>
+									</button>
+								<?php endif ?>
+							</div>
+						</div>
+					</div>
+
+					<h3 class="item-name">
+						<a href="<?=$item->getProductUrl()?>">
+							<?=$helper->productAttribute($item, $item->getName(), 'name')?>
+						</a>
+					</h3>
+
+					<article class="item-description std">
+						<?=Mage::helper('core/string')->truncate($helper->productAttribute($item, $item->getShortDescription(), 'short_description') ?: $helper->productAttribute($item, $item->getDescription(), 'description'), 155, '...', $remainder, false)?>
+					</article>
+
+					<div class="box-inset-absolute-bottom item-shop">
+						<?php if ($item->isSaleable()): ?>
+							<button type="button" title="<?=$this->__('Add to Cart')?>" class="btn btn-dark btn-cart" onclick="setLocation('<?=$this->getAddToCartUrl($item)?>');">
+								<em><em></em></em>
+								<?=$this->__('Add to Cart')?>
+							</button>
+						<?php endif ?>
+						<div class="price-box">
+							<span class="minimal-price">
+								<?=$this->helper('core')->currency($item->getMinimalPrice())?>
+							</span>
+							<div class="is-hidden real-price-box">
+								<?=$this->getPriceHtml($item, true)?>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</li>
+			<?php
+
+			// Close list on 3rd item
+			if ($i % $perRow === $perRow - 1): ?>
+				</ul>
+			<?php endif ?>
+		<?php
+
+		// Increase our counter
+		$i++;
+		endforeach;
+
+		// Close any opened lists
+		if ($i % $perRow < $perRow - 1): ?>
+			</ul>
+		<?php endif ?>
+	</div>
+<?php endif ?>

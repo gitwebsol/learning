@@ -1,0 +1,26 @@
+<?php
+
+$links = $this->getLinks();
+$index = 1;
+$count = count($links);
+?>
+<div class="block block-account">
+	<div class="block-title">
+		<strong>
+			<?=$this->__('My') ?>
+			<em><?=$this->__('Account')?></em>
+		</strong>
+	</div>
+	<div class="block-content">
+		<ul class="no-margin">
+			<?php foreach ($links as $link): ?>
+				<?php $last = ($index++ >= $count) ?>
+				<?php if ($this->isActive($link)): ?>
+					<li class="current<?=($last ? ' last' : '')?>"><strong><?=$link->getLabel()?></strong></li>
+				<?php else: ?>
+					<li<?=($last ? ' class="last"' : '')?>><a href="<?=$link->getUrl()?>"><?=$link->getLabel()?></a></li>
+				<?php endif ?>
+			<?php endforeach ?>
+		</ul>
+	</div>
+</div>

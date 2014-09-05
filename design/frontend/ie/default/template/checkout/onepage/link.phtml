@@ -1,0 +1,6 @@
+<?php if ($this->isPossibleOnepageCheckout()):?>
+    <button type="button" title="<?=$this->__('Proceed to Checkout')?>" class="btn btn-dark btn-checkout"<?php if ($this->isDisabled()):?> disabled="disabled"<?php endif;?> onclick="window.location='<?=$this->getCheckoutUrl()?>';">
+    	<em><em></em></em>
+    	<?=$this->__('Proceed to Checkout')?>
+    </button>
+<?php endif?>

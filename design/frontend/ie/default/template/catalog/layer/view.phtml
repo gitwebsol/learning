@@ -1,0 +1,38 @@
+<?php
+/**
+ * Category layered navigation
+ *
+ * @see Mage_Catalog_Block_Layer_View
+ */
+?>
+<?php if ($this->canShowBlock()): ?>
+<div class="block block-layered-nav">
+	<div class="block-title <?=$this->getLayer()->getState()->getFilters() ? 'block-title-featured' : null?>">
+		<strong>
+			<?=$this->__('Shop')?>
+			<em><?=$this->__('By')?></em>
+		</strong>
+	</div>
+	<?php if ($this->getLayer()->getState()->getFilters()): ?>
+		<div class="block-content block-content-featured">
+			<?=$this->getStateHtml()?>
+			<div class="clear-filters actions no-margin no-padding"><a href="<?=$this->getClearUrl()?>"><?=$this->__('Clear All')?></a></div>
+		</div>
+	<?php endif ?>
+
+	<?php if ($this->canShowOptions()): ?>
+		<div class="block-content">
+			<p class="block-subtitle"><?=$this->__('Shopping Options')?></p>
+			<dl class="no-margin">
+				<?php $filters = $this->getFilters()?>
+				<?php foreach ($filters as $filter): ?>
+				<?php if ($filter->getItemsCount()): ?>
+					<dt><?=$this->__($filter->getName())?></dt>
+					<dd><?=$filter->getHtml()?></dd>
+				<?php endif ?>
+				<?php endforeach ?>
+			</dl>
+		</div>
+	<?php endif ?>
+</div>
+<?php endif ?>

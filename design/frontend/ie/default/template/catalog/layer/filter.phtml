@@ -1,0 +1,22 @@
+<?php
+/**
+ * Template for filter items block
+ *
+ * @see Mage_Catalog_Block_Layer_Filter
+ */
+?>
+
+<ol class="no-margin">
+	<?php foreach ($this->getItems() as $item): ?>
+		<li>
+			<?php if ($item->getCount() > 0): ?>
+				<a href="<?=$this->urlEscape($item->getUrl())?>"><?=$item->getLabel()?></a>
+			<?php else: ?>
+				<?=$item->getLabel()?>
+			<?php endif ?>
+			<?php if ($this->shouldDisplayProductCount()): ?>
+				(<?=$item->getCount()?>)
+			<?php endif ?>
+		</li>
+	<?php endforeach?>
+</ol>

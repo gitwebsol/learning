@@ -1,0 +1,20 @@
+<?php
+/**
+ * Shopping cart totals template
+ *
+ * @see Mage_Checkout_Block_Cart_Totals
+ * @var $this Mage_Checkout_Block_Cart_Totals
+ */
+?>
+<?php if ($this->canApplyMsrp()): ?>
+	<div class="cart-msrp-totals"><?=$this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER')?></div>
+<?php else: ?>
+	<table class="table" id="shopping-cart-totals-table">
+		<tbody>
+			<?=$this->renderTotals()?>
+		</tbody>
+		<tfoot>
+			<?=$this->renderTotals('footer')?>
+		</tfoot>
+	</table>
+<?php endif ?>

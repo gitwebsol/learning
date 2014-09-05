@@ -1,0 +1,24 @@
+<?php if ($crumbs and is_array($crumbs)): ?>
+	<div class="breadcrumbs">
+		<ul class="list-inline no-margin">
+			<?php foreach ($crumbs as $name => $crumb): ?>
+				<li class="<?=$name?>">
+					<?php if ($crumb['link']): ?>
+						<a href="<?=$crumb['link']?>" title="<?=$this->htmlEscape($crumb['title'])?>" >
+							<?=$this->htmlEscape($crumb['label'])?>
+						</a>
+					<?php elseif ($crumb['last']): ?>
+						<strong>
+							<?=$this->htmlEscape($crumb['label'])?>
+						</strong>
+					<?php else: ?>
+						<?=$this->htmlEscape($crumb['label'])?>
+					<?php endif ?>
+					<?php if ( ! $crumb['last']): ?>
+						<span>\\</span>
+					<?php endif ?>
+				</li>
+			<?php endforeach ?>
+		</ul>
+	</div>
+<?php endif ?>

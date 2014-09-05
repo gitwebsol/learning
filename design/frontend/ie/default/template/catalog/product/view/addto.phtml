@@ -1,0 +1,23 @@
+<?php
+
+$product           = $this->getProduct();
+$wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($product);
+$compareUrl        = $this->helper('catalog/product_compare')->getAddUrl($product);
+?>
+<div class="add-to">
+	<?php if ($this->helper('wishlist')->isAllow()): ?>
+		<a href="<?=$wishlistSubmitUrl?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="btn btn-dark btn-wishlist">
+			<?=$this->__('Add to Wishlist')?>
+		</a>
+	<?php endif ?>
+	<?php
+
+	// Request to remove the add to cart functionality by Vinay
+	if (/*$compareUrl*/ false): ?>
+		<a href="<?=$compareUrl?>" class="btn btn-dark btn-compare">
+			<?=$this->__('Add to Compare')?>
+		</a>
+	<?php else: ?>
+		&nbsp;
+	<?php endif ?>
+</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Webcomm_Slider>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Webcomm_Slider>
+	</modules>
+</config>

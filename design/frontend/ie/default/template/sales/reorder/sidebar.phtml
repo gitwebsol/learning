@@ -1,0 +1,57 @@
+<?php
+/**
+ * Last order sidebar
+ *
+ * @see Mage_Sale_Block_Reorder_Sidebar
+ */
+
+$items             = $this->getItems();
+$showAddButtonFlag = false;
+?>
+<?php if($items): ?>
+<div class="block block-reorder">
+    <div class="block-title">
+        <strong>
+            <?=$this->__('My')?>
+            <em><?=$this->__('Orders')?></em>
+        </strong>
+    </div>
+    <form method="post" action="<?=$this->getFormActionUrl()?>" id="reorder-validate-detail">
+        <div class="block-content">
+            <p class="block-subtitle"><?=$this->__('Last Ordered Items')?></p>
+            <ol id="cart-sidebar-reorder">
+                <?php foreach ($items as $item): ?>
+                    <li class="item">
+                        <?php if ($this->isItemAvailableForReorder($item)): ?>
+                            <?php $showAddButtonFlag = true?>
+                            <input type="checkbox" name="order_items[]" id="reorder-item-<?=$item->getId()?>" value="<?=$item->getId()?>" title="<?=$this->__('Add to Cart')?>" class="checkbox validate-one-required-by-name" />
+                            <script>
+                            //<![CDATA[
+                                $('reorder-item-<?=$item->getId()?>').advaiceContainer = 'cart-sidebar-reorder-advice-container';
+                            //]]>
+                            </script>
+                        <?php endif ?>
+                        <p class="product-name"><a href="<?=$item->getProduct()->getProductUrl()?>"><?=$this->htmlEscape($item->getName())?></a></p>
+                    </li>
+                <?php endforeach ?>
+            </ol>
+            <div id="cart-sidebar-reorder-advice-container"></div>
+            <div class="actions">
+                <?php if ($showAddButtonFlag): ?>
+                    <button type="submit" title="<?=$this->__('Add to Cart')?>" class="btn btn-cart">
+                        <em><em></em></em>
+                        <?=$this->__('Add to Cart')?>
+                    </button>
+                <?php endif ?>
+                <a href="<?=$this->getUrl('customer/account')?>"><?=$this->__('View All') ?></a>
+            </div>
+        </div>
+    </form>
+</div>
+<?=$this->getPagerHtml() ?>
+<script>
+//<![CDATA[
+    var reorderFormDetail = new VarienForm('reorder-validate-detail');
+//]]>
+</script>
+<?php endif?>

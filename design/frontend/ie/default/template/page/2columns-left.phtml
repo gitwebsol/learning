@@ -1,0 +1,38 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<?=$this->getChildHtml('head')?>
+</head>
+<body <?=($class = $this->getBodyClass()) ? 'class="'.$class.'"' : null?>>
+	<?=$this->getChildHtml('after_body_start')?>
+	
+	<?=$this->getChildHtml('header')?>
+	<?=$this->getChildHtml('nav')?>
+	<?=$this->getChildHtml('header_shadow')?>
+	<div role="main">
+		<div class="centre-container">
+
+			<aside class="sidebar">
+				<?=$this->getChildHtml('left')?>
+				<div class="sidebar-logo">
+					<h3><?=$this->__('Industrial Evolution')?></h3>
+				</div>
+			</aside>
+
+			<div class="content with-one-sidebar">
+				<?=$this->getChildHtml('global_messages')?>
+				<?=$this->getChildHtml('breadcrumbs')?>
+				<?=$this->getChildHtml('content')?>
+			</div>
+
+		</div>
+	</div>
+	<?=$this->getChildHtml('bottom-nav')?>
+	<?=$this->getChildHtml('footer')?>
+
+	<?=$this->getChildHtml('before_body_end')?>
+</body>
+</html>

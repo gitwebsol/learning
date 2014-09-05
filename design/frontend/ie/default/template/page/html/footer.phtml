@@ -1,0 +1,33 @@
+<footer id="footer">
+
+	<div class="centre-container">
+		
+		<nav class="footer-nav">
+			<?=$this->getChildHtml('footer_nav')?>
+		</nav>
+
+	</div>
+
+	<div class="centre-container">
+
+		<div class="copyright-column">
+			<div class="copyright">
+				<?=$this->getCopyright()?>
+			</div>
+		</div>
+
+		<div class="credits-column">
+			<div class="credits">
+				<a href="http://www.webcomm.com.au" class="credits-link webcomm" target="_blank">
+					<h2><?=$this->__('Website Put Together By Webcomm')?></h2>
+					<div class="overlay"></div>
+				</a>
+				<a href="http://www.elitegraphics.com.au" class="credits-link elite-graphics" target="_blank">
+					<?=$this->__('Website Designed By Elite Graphics')?>
+					<div class="overlay"></div>
+				</a>
+			</div>
+		</div>
+
+	</div>
+</footer>

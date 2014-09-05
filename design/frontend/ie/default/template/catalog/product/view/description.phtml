@@ -1,0 +1,14 @@
+<?php
+/**
+ * Product description template
+ *
+ * @see Mage_Catalog_Block_Product_View_Description
+ */
+
+$description = $this->getProduct()->getDescription();
+?>
+<?php if ($description):?>
+	<div class="std">
+		<?=$this->helper('catalog/output')->productAttribute($this->getProduct(), $description, 'description')?>
+	</div>
+<?php endif ?>

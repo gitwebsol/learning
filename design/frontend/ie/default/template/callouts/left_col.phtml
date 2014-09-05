@@ -1,0 +1,45 @@
+<?php
+
+$phone   = Mage::getStoreConfig('general/store_information/phone');
+$email   = Mage::getStoreConfig('contacts/email/recipient_email');
+$address = Mage::getStoreConfig('general/store_information/address');
+?>
+<div class="block block-banner">
+	<div class="block-title">
+		<strong>
+			<?=$this->__('Contact')?>
+			<em><?=$this->__('Us')?></em>
+		</strong>
+	</div>
+	<div class="block-content">
+		<p>
+			<?=$this->__('Whether you\'ve got a question, feedback, concern or just want to say hi, Industrial Evolution would love to hear from you.')?>
+		</p>
+		<dl>
+			<dt><?=$this->__('Online Contact')?></dt>
+			<dd>
+				<a href="<?=Mage::getUrl('contacts')?>">Contact Now</a>
+			</dd>
+			<?php if ($phone): ?>
+				<dt><?=$this->__('Phone')?></dt>
+				<dd>
+					<a href="tel:<?=$phone?>"><?=$phone?></a>
+				</dd>
+			<?php endif ?>
+			<?php if ($email): ?>
+				<dt><?=$this->__('Email')?></dt>
+				<dd>
+					<a href="mailto:<?=$email?>" class="break-word"><small><?=$email?></small></a>
+				</dd>
+			<?php endif ?>
+			<?php if ($address): ?>
+				<dt><?=$this->__('Address')?></dt>
+				<dd>
+					<address>
+						<?=nl2br($address)?>
+					</address>
+				</dd>
+			<?php endif ?>
+		</dl>
+	</div>
+</div>

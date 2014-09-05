@@ -1,0 +1,61 @@
+<?php
+
+// Get resources
+$formId = 'contactForm'.uniqid();
+?>
+<div class="block block-contact">
+	<div class="block-title">
+		<strong>
+			<span>
+				<?=$this->__('Custom')?>
+				<em><?=$this->__('Design')?></em>
+			</span>
+		</strong>
+	</div>
+	<div class="block-content">
+
+		<p class="block-subtitle">
+			<?=$this->__('Can\'t find what you need? Tell us your requirements and we’ll custom design a solution for you')?>
+		</p>
+
+		<form action="<?=Mage::getUrl('contacts/index/post')?>" method="post" id="<?=$formId?>">
+
+			<label for="name" class="required"><em>*</em><?=Mage::helper('contacts')->__('Name')?></label>
+			<div class="input-box">
+				<input name="name" id="name" title="<?=Mage::helper('contacts')->__('Name')?>" value="<?=$this->htmlEscape($this->helper('contacts')->getUserName())?>" class="input-text required-entry input-small" type="text" />
+			</div>
+
+			<label for="email" class="required"><em>*</em><?=Mage::helper('contacts')->__('Email')?></label>
+			<div class="input-box">
+				<input name="email" id="email" title="<?=Mage::helper('contacts')->__('Email')?>" value="<?=$this->htmlEscape($this->helper('contacts')->getUserEmail())?>" class="input-text required-entry validate-email input-small" type="text" />
+			</div>
+
+			<label for="telephone"><?=Mage::helper('contacts')->__('Telephone')?></label>
+			<div class="input-box">
+				<input name="telephone" id="telephone" title="<?=Mage::helper('contacts')->__('Telephone')?>" value="" class="input-text input-small" type="text" />
+			</div>
+
+			<label for="comment" class="required"><em>*</em><?=Mage::helper('contacts')->__('Requirements')?></label>
+			<div class="input-box">
+				<textarea name="comment" id="comment" title="<?=Mage::helper('contacts')->__('Requirements')?>" class="required-entry input-text input-small" rows="3"></textarea>
+			</div>
+
+			<input type="hidden" name="hideit" id="hideit" value="" style="display:none !important;" />
+
+		</form>
+
+		<div class="actions">
+			<button type="button" title="<?=$this->__('Send Now')?>" class="btn btn-dark" onclick="contactFormSidebar.submit(this)">
+				<em><em></em></em>
+				<?=$this->__('Send Now')?>
+			</button>
+		</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    var contactFormSidebar = new VarienForm('<?=$formId?>', true);
+//]]>
+</script>

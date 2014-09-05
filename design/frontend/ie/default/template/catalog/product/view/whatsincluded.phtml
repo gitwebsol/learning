@@ -1,0 +1,9 @@
+<?php
+
+$whatsIncluded = $this->getProduct()->getWhatsIncluded();
+?>
+<?php if ($whatsIncluded): ?>
+	<div class="std">
+		<?=$this->helper('catalog/output')->productAttribute($this->getProduct(), $whatsIncluded, 'whats_included')?>
+	</div>
+<?php endif ?>

@@ -1,0 +1,42 @@
+<h3>
+	<?=$this->__('Other people marked this product with these tags:')?>
+</h3>
+<ul class="no-margin list-inline tags-list">
+	<?=$this->renderTags('<li><a href="%1$s">%2$s</a> (%3$s)</li>')?>
+</ul>
+<form action="<?=$this->getFormAction()?>" method="get" id="add-tag-form">
+	<fieldset>
+		<legend>
+			<?=$this->__('Add Your Tags')?>
+		</legend>
+		<div class="control-group">
+			<label for="product-tag-name">
+				<?=$this->__('Tags')?>
+			</label>
+			<div>
+				<input type="text" class="input-text required-entry" name="productTagName" id="product-tag-name">
+				<span class="note">
+					<?=__("Use spaces to separate tags. Use single quotes (') for phrases.")?>
+				</span>
+			</div>
+		</div>
+		<div class="actions">
+			<button type="button" title="<?=$this->__('Add Tags')?>" class="btn" id="product-tag-button">
+				<?=$this->__('Add Tags')?>
+			</button>
+		</div>
+	</fieldset>
+</form>
+<script>
+jQuery(document).ready(function($) {
+
+	var addTagForm = new VarienForm('add-tag-form');
+
+	$('#product-tag-button').on('click', function() {
+
+		if (addTagForm.validator.validate()) {
+			addTagForm.form.submit();
+		}
+	});
+});
+</script>

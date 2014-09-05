@@ -1,0 +1,19 @@
+<?php
+$helper = $this->helper('catalogsearch');
+?>
+<div class="search-mini">
+	<form id="search-mini-form" action="<?=$helper->getResultUrl()?>" method="get">
+		<input id="search" type="text" name="<?=$helper->getQueryParamName()?>" value="<?=$helper->getEscapedQueryText()?>" class="input-text input-small no-margin" maxlength="<?=$helper->getMaxQueryLength();?>" placeholder="<?=$this->__('Search The Website...')?>">
+		<button type="submit" class="search-mini-button" title="<?=$this->__('Search')?>">
+			<?=$this->__('Search')?>
+			<div class="overlay"></div>
+		</button>
+		<div id="search_autocomplete" class="search-autocomplete"></div>
+		<script>
+		//<![CDATA[
+			var searchForm = new Varien.searchForm('search-mini-form', 'search', '');
+			searchForm.initAutocomplete('<?php echo $helper->getSuggestUrl() ?>', 'search_autocomplete');
+		//]]>
+		</script>
+	</form>
+</div>

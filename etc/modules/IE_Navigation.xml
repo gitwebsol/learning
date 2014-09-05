@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config>
+	<modules>
+		<IE_Navigation>
+			<active>true</active>
+			<codePool>local</codePool>
+		</IE_Navigation>
+	</modules>
+</config>

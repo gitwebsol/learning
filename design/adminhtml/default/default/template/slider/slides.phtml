@@ -1,0 +1,126 @@
+<div id="<?=$this->getHtmlId()?>">
+	<div class="grid">
+		<table cellspacing="0" class="data border" id="<?=$this->getHtmlId()?>_grid" width="100%">
+			<col width="120" />
+			<col />
+			<col />
+			<col width="100" />
+			<col width="70" />
+			<col width="70" />
+			<thead>
+				<tr class="headings">
+					<th><?=$this->helper('adminhtml')->__('Image')?></th>
+					<!-- <th><?=$this->helper('slider')->__('Caption')?></th> -->
+					<th><?=$this->helper('slider')->__('Action')?></th>
+					<th><?=$this->helper('adminhtml')->__('Sort Order')?>
+					<th class="a-center"><?=$this->helper('adminhtml')->__('Disable')?></th>
+					<th class="last a-center"><?=$this->helper('adminhtml')->__('Remove')?></th>
+				</tr>
+			</thead>
+			
+			<?php
+			/**
+			 * This is used as our template
+			 */
+			?>
+			<tbody id="<?=$this->getHtmlId()?>_list">
+				<tr id="<?=$this->getHtmlId()?>_template" class="template no-display">
+					<td class="cell-image">
+						<div class="place-holder" onmouseover="<?=$this->getJsObjectName()?>.loadImage('__file__')">
+							<span><?=$this->helper('slider')->__('Roll over for preview')?></span>
+						</div>
+						<img src="<?=$this->getSkinUrl('images/spacer.gif')?>" width="100" style="display: none;" alt="" />
+					</td>
+					<td class="cell-label">
+						<input type="text" class="input-text" onkeyup="<?=$this->getJsObjectName()?>.updateImage('__file__')" onchange="<?=$this->getJsObjectName()?>.updateImage('__file__')" />
+					</td>
+					<!-- <td class="cell-action">
+						<input type="text" class="input-text" onkeyup="<?=$this->getJsObjectName()?>.updateImage('__file__')" onchange="<?=$this->getJsObjectName()?>.updateImage('__file__')" />
+					</td> -->
+					<td class="cell-position">
+						<input type="text" class="input-text validate-number" onkeyup="<?=$this->getJsObjectName()?>.updateImage('__file__')" onchange="<?=$this->getJsObjectName()?>.updateImage('__file__')" />
+					</td>
+					<td class="cell-disable a-center last">
+						<input type="checkbox" onclick="<?=$this->getJsObjectName()?>.updateImage('__file__')" />
+					</td>
+					<td class="cell-remove a-center">
+						<input type="checkbox" onclick="<?=$this->getJsObjectName()?>.updateImage('__file__')" />
+					</td>
+				</tr>
+				
+				<?php
+				/**
+				 * This is the default row
+				 */
+				?>
+				<tr id="<?=$this->getHtmlId()?>-image-0">
+					<td class="cell-image">
+						<?=$this->helper('catalog')->__('No image')?>
+					</td>
+					<td class="cell-label">
+						<input type="hidden" />
+						&nbsp;
+					</td>
+					<!-- <td class="cell-action">
+						<input type="hidden" />
+						&nbsp;
+					</td> -->
+					<td class="cell-position">
+						<input type="hidden" />
+						&nbsp;
+					</td>
+					<td class="cell-remove a-center">
+						<input type="hidden" />
+						&nbsp;
+					</td>
+					<?php
+					/**
+					 * The only reason we need the following
+					 * loop is so we don't break the uploading
+					 * javascript (in product.js)
+					 */
+					?>
+					<?php foreach ($this->getImageTypes() as $typeId => $type): ?>
+						<td class="cell-<?php echo $typeId ?> a-center" style="display: none;">
+							<input type="hidden" disabled="disabled" name="<?=$type['field']?>" onclick="<?=$this->getJsObjectName()?>.setProductImages('no_selection')" value="no_selection" />
+						</td>
+					<?php endforeach; ?>
+					<?php
+					/**
+					 * End of stupid lines
+					 */
+					?>
+					<td class="cell-disable a-center last">
+						<input type="hidden" />
+						&nbsp;
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6" class="last" style="padding-top: 8px;">
+						<?php
+						/**
+						 * The actual flash uploader
+						 */
+						?>
+						<?=$this->getUploadHtml()?>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>
+<?php
+/**
+ * Bunch of inputs the
+ * uploader uses
+ */
+?>
+<input type="hidden" id="<?=$this->getHtmlId()?>_save" name="slides" value="<?=$this->htmlEscape($this->getImagesJson())?>" />
+<input type="hidden" id="<?=$this->getHtmlId()?>_save_image" name="[values]" value="<?=$this->htmlEscape($this->getImagesValuesJson())?>" />
+<script type="text/javascript">
+//<![CDATA[
+var <?=$this->getJsObjectName()?> = new Product.Gallery('<?=$this->getHtmlId()?>', <?=$this->getUploader()->getJsObjectName()?>, <?=$this->getImageTypesJson()?>);
+//]]>
+</script>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Tweakmag Product Redirect Extension
+ *
+ * @category   Tweakmag
+ * @package    Tweakmag_Productredirect
+ * @copyright  Copyright (c) 2009 Tweakmag (http://www.tweakmag.com)
+ * @author	   Adam Martin (adam.martin@tweakmag.com)
+ * @license    Opensource
+ * @link	   http://www.tweakmag.com
+ */
+ -->
+<config>
+ 	<modules>
+ 		<Tweakmag_Productredirect>
+ 			<codePool>community</codePool>
+			<active>true</active>
+		</Tweakmag_Productredirect>
+	</modules>
+</config>
